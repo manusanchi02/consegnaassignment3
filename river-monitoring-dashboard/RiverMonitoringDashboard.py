@@ -5,15 +5,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
 
-# URL del tuo server
+# URL of our server
 url = "http://localhost:8080"
 
-# Dati iniziali del grafico
+#initial graphic data
 x = []
 y = []
 counter = 0
 
-# Creazione della finestra PySimpleGUI
+# Creation of PySimpleGui window
 layout = [
     [sg.Text('State: '), sg.Text('', key='-ERROR-')],
     [sg.Text('Valve value: '), sg.Text('', key='-VALVE-')],
@@ -27,9 +27,9 @@ layout = [
 window = sg.Window('Water level graph', layout, finalize=True)
 plot_elem = window['-IMAGE-']
 
-# Ciclo principale
+# main loop
 while True:
-    event, values = window.read(timeout=100)  # Timeout di 1 secondo per evitare blocco dell'interfaccia
+    event, values = window.read(timeout=100)  # Timeout = 100ms to not block the execution
 
     if event == sg.WINDOW_CLOSED or event == 'Exit':
         break
@@ -39,10 +39,10 @@ while True:
         slider_value = values['-SLIDER-']
         response = requests.get(url + "/set_valve_value?value=" + str(slider_value))
 
-    # Richiesta HTTP
+    # HTTP Request
     response = requests.get(url)
 
-    # Verifica dello stato della risposta
+    # Response state check
     if response.status_code == 200:
         elementi_divisi = response.text.split(';')
         for elemento in elementi_divisi:
@@ -57,21 +57,21 @@ while True:
                     x.pop(0)
                     y.pop(0)
 
-                # Creazione del grafico
+                # creation of the graph
                 plt.plot(x, y, '-o', label='Water label')
                 plt.xlabel('last 20 measures')
                 plt.ylabel('Level (cm)')
                 plt.ylim(0, 1)
 
-                # Salvataggio dell'immagine in memoria
+                # Saving the image of the graph in the memory
                 buf = BytesIO()
                 plt.savefig(buf, format='png')
                 buf.seek(0)
 
-                # Aggiornamento dell'immagine nella finestra
+                # Update of the image in the window
                 plot_elem.update(data=buf.read())
 
-                # Pulizia della figura di Matplotlib
+                # Cleaning of the image of Matplotlib
                 plt.clf()
                 buf.close()
 
@@ -82,5 +82,5 @@ while True:
     else:
         print(f"Errore nella richiesta HTTP. Codice di stato: {response.status_code}")
 
-# Chiusura della finestra PySimpleGUI
+# Closing the PySimpleGui window
 window.close()
