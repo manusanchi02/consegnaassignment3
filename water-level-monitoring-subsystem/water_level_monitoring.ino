@@ -1,3 +1,9 @@
+/**
+ * @author lorenzo.annibalini@studio.unibo.it 	Annibalini Lorenzo
+ * @author lorenzo.bacchini4@studio.unibo.it 	Bacchini Lorenzo
+ * @author emanuele.sanchi@studio.unibo.it 		Sanchi Emanuele
+ */
+
 #include <Arduino.h>
 #include "Sonar.h"
 #include "MqttProvider.h"
