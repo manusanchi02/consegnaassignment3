@@ -69,6 +69,9 @@ void setup()
     lcd->setAndPrint("current modality:", 0, 2);
 }
 
+/**
+ * Function called when button is pressed to enable and disable manual mode 
+*/
 void setUnsetManualMode()
 {
     if (button->isPressed())
@@ -84,6 +87,9 @@ void setUnsetManualMode()
     }
 }
 
+/**
+ * Function to read from serial in string format
+*/
 String readStringFromSerial()
 {
     String inputString = "";
@@ -91,22 +97,21 @@ String readStringFromSerial()
 
     while (Serial.available() > 0)
     {
-        // Leggi il carattere successivo
+        // read next character
         Serial.readBytes(&incomingByte, 1);
-        // Aggiungi il carattere alla stringa di input
+        //add character to inputString
         inputString += incomingByte;
     }
     return inputString;
 }
 
 /**
- * Function called to make the fsm take a step forward over the controllerState.
+ * Function called to make the fsm take a step forward
  */
 void step()
 {
 
-    // read data from River Monitoring Service (state and *level)
-    //*level only if state sent is manual
+    // read data from River Monitoring Service (state and level)
     data = readStringFromSerial();
     if (data.length() > 0)
     {
